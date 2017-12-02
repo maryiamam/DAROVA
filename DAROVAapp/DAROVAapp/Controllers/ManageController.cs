@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using DAROVAapp.Models;
+using DAROVAapp.Business.Interfaces;
+using AutoMapper;
 
 namespace DAROVAapp.Controllers
 {
@@ -15,15 +17,9 @@ namespace DAROVAapp.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public ManageController()
-        {
-        }
-
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
+        public ManageController() {
         }
 
         public ApplicationSignInManager SignInManager
@@ -64,13 +60,17 @@ namespace DAROVAapp.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
+            var user = UserManager.Users.FirstOrDefault(u => u.Id == userId);
+            var model = new ApplicationUser
             {
-                HasPassword = HasPassword(),
+                Email = await UserManager.GetEmailAsync(userId),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                Nickname = user.Nickname,
+                EducationsEstablishment = user.EducationsEstablishment,
+                Grade = user.Grade,
+                Faculty = user.Faculty,
+                Speciality = user.Speciality,
+                ImageURL = user.ImageURL
             };
             return View(model);
         }
@@ -116,18 +116,15 @@ namespace DAROVAapp.Controllers
             {
                 return View(model);
             }
-            // Generate the token and send it
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
-            if (UserManager.SmsService != null)
+            var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.Number, code);
+            if (result.Succeeded)
             {
-                var message = new IdentityMessage
-                {
-                    Destination = model.Number,
-                    Body = "Your security code is: " + code
-                };
-                await UserManager.SmsService.SendAsync(message);
+                return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
             }
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
+            // If we got this far, something failed, redisplay form
+            ModelState.AddModelError("", "Failed to add phone");
+            return RedirectToAction("Index");
         }
 
         //
