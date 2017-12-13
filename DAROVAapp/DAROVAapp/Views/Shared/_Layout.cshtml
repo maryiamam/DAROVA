@@ -35,12 +35,12 @@
             </div>
         </div>
     </div>
-    <div class="container body-content content">
+    <div class="body-content content">
         @RenderBody()
     </div>
     <hr />
     <footer class="container">
-        <p>&copy; @DateTime.Now.Year - World's best organizer</p>
+        <p>&copy; @DateTime.Now.Year - Forest berries</p>
     </footer>
 
     @Scripts.Render("~/bundles/jquery")
@@ -48,6 +48,8 @@
     @RenderSection("scripts", required: false)
     <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
     <script src="~/Scripts/app/fileName.js"></script>
+    <script src="~/Scripts/app/showModal.js"></script>
+    <script src="~/Scripts/app/saveScheduleItemForm.js"></script>
     <script src="~/Scripts/app/saveProfileChanges.js"></script>
     <script src="~/Scripts/app/calendar.js"></script>
     <script src="~/Scripts/moment.min.js"></script>

@@ -87,7 +87,6 @@ a.ui-state-default {
 
 #datepicker div.ui-datepicker {
     position: relative;
-    top: 20px;
     width: 240px;
 }
 
@@ -102,10 +101,29 @@ ui-datepicker-today a.ui-state-default, a.ui-state-highlight {
 }
 
 div.ui-datepicker-header {
-    background: background: #26a69a !important;
+    background: #26a69a !important;
+    color: white;
 }
 
 .week {
     position: relative;
-    top: 15px;
+    top: 5px;
+    display: none;
 }
+
+.btn:hover {
+    color: white;
+}
+
+select#type{
+    margin-top: 15px;
+}
+
+.edit-schedule-btn {
+    padding: 0 56px !important;
+}
+
+.date-span {
+    display: none;
+}
+

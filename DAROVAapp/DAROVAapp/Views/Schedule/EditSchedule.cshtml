@@ -1,0 +1,107 @@
+﻿@using DAROVAapp.Constants;
+@model List<DAROVAapp.Models.ScheduleItemModel>
+@{
+    ViewBag.Title = "Edit Schedule";
+}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Edit your schedule</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <button data-target="add-item" class="btn modal-trigger waves-effect">Add item</button>
+        </div>
+    </div> 
+    <div class='row'>
+        <div class="col-md-12">
+            <ul class="collapsible popup" data-collapsible="expandable">
+                @foreach (var item in @Model)
+                {
+                    <li>
+                        <div class="collapsible-header">
+                            @item.SubjectName
+                        </div>
+                        <div class="collapsible-body">
+                            <label>Professor:</label>&nbsp;@item.Professor<br/>
+                            <label>Time:</label>&nbsp;@item.StartTime.TimeOfDay - @item.FinishTime.TimeOfDay<br />
+                            <label>Week day:</label>&nbsp;@item.StartDate.DayOfWeek<br />
+                            <label>Duration:</label>&nbsp;@item.StartDate.ToShortDateString() - @item.StartDate.AddDays(7 * (item.Duration-1)).ToShortDateString()<br />
+                            <label>Place:</label>&nbsp;@item.Place<br />
+                            <label>Type:</label>&nbsp;@item.Type<br />
+                            <button class="btn edit-schedule-item-btn yellow">Edit</button>
+                            <button class="btn delete-schedule-item-btn red" id="@item.Id">Delete</button>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div id="add-item" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>Add new item</h4>
+        <form>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Subject name</label>
+                    <input type="text" class="form-control" id="subject">
+                </div>
+                <div class="col-md-6">
+                    <label>Professor</label>
+                    <input type="text" class="form-control" id="professor">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Start time</label>
+                    <input type="time" class="form-control" id="start-time">
+                </div>
+                <div class="col-md-6">
+                    <label>Type</label>
+                    <select class="form-control" id="type">
+                        <option value="" disabled selected></option>
+                        <option value="@ScheduleItemsTypes.Lecture">@ScheduleItemsTypes.Lecture</option>
+                        <option value="@ScheduleItemsTypes.Practice">@ScheduleItemsTypes.Practice</option>
+                        <option value="@ScheduleItemsTypes.Deadline">@ScheduleItemsTypes.Deadline</option>
+                        <option value="@ScheduleItemsTypes.Event">@ScheduleItemsTypes.Event</option>
+                        <option value="@ScheduleItemsTypes.Test">@ScheduleItemsTypes.Test</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 file-input-container">
+                    <label>Finish time</label>
+                    <input type="time" class="form-control" id="finish-time">
+                </div>
+                <div class="col-md-6">
+                    <label>Place</label>
+                    <input type="text" class="form-control" id="place">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Duration (number of weeks)</label>
+                    <input type="number" class="form-control" id="duration" min="1">
+                </div>
+                <div class="col-md-6">
+                    <label>Start date</label>
+                    <input type="date" class="form-control" id="start-date">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button href="#!" class="modal-action modal-close waves-effect waves-red btn red">Cancel</button>
+        <button href="#!" class="modal-action modal-close waves-effect waves-green btn" id="save-schedule-item">Save</button>
+    </div>
+</div>
+

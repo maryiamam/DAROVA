@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "My Schedule";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="datepicker"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @Html.ActionLink("Edit schedule", "EditSchedule", "Schedule", null, new { @class = "btn btn-default edit-schedule-btn" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 week">
+            
+        </div>
+    </div>
+</div>
+            

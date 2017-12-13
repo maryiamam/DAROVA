@@ -1,0 +1,71 @@
+﻿@model DAROVAapp.Models.ProfileViewModel
+<div class="container">
+
+    <div class="row">
+        <h2 class="col-md-12"> Edit your profile </h2>
+    </div>
+    <form>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Name Surname</label>
+                <input type="text" class="form-control" id="nickname" value="@Model.Nickname">
+            </div>
+            <div class="col-md-6">
+                <label>University</label>
+                <input type="text" class="form-control" id="university" value="@Model.EducationsEstablishment">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>Speciality</label>
+                <input type="text" class="form-control" id="speciality" value="@Model.Speciality">
+            </div>
+            <div class="col-md-6">
+                <label>Faculty</label>
+                <input type="text" class="form-control" id="faculty" value="@Model.Faculty">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 file-input-container">
+                <label>Avatar</label>
+                <input type="file" class="form-control file-input" id="file" name="file" onchange="setFilename()">
+                <input for="file" class="form-control" id="input-hider" value="@Model.ImageURL">
+            </div>
+            <div class="col-md-6">
+                <label>Grade</label>
+                <input type="number" class="form-control" id="grade" min="1" max="12" value="@Model.Grade">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-8">
+                <button class="btn btn-default btn-save" id="save-profile-changes">Save</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="password col-md-12">
+            <label>Password: </label>
+            @Html.ActionLink("Change your password", "ChangePassword", "Manage")
+        </div>
+
+        <div class="phone-number col-md-12">
+            <label>Phone Number: </label>
+            @(Model.PhoneNumber)
+            @if (Model.PhoneNumber != null)
+            {
+                using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <span> <input type="submit" value="Remove" class="btn-link" /> </span>
+                    <span> @Html.ActionLink("Change", "AddPhoneNumber", "Manage") </span>
+                }
+
+            }
+            else
+            {
+                <span>@Html.ActionLink("Add", "AddPhoneNumber", "Manage")</span>
+            }
+        </div>
+    </div>
+</div>

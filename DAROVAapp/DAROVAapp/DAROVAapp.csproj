@@ -221,6 +221,7 @@
     <Compile Include="Business\Interfaces\IUnitOfWork.cs" />
     <Compile Include="Business\Interfaces\Repositories\IGenericRepository.cs" />
     <Compile Include="Business\UnitOfWork.cs" />
+    <Compile Include="Constants\ScheduleItemsTypes.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -245,6 +246,10 @@
     <Compile Include="Migrations\201711252021027_add nickname.cs" />
     <Compile Include="Migrations\201711252021027_add nickname.Designer.cs">
       <DependentUpon>201711252021027_add nickname.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201712052205593_add start date to schedule item model.cs" />
+    <Compile Include="Migrations\201712052205593_add start date to schedule item model.Designer.cs">
+      <DependentUpon>201712052205593_add start date to schedule item model.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -311,12 +316,18 @@
     <Content Include="Scripts\app\calendar.js" />
     <Content Include="Scripts\app\fileName.js" />
     <Content Include="Scripts\app\saveProfileChanges.js" />
+    <Content Include="Scripts\app\saveScheduleItemForm.js" />
+    <Content Include="Scripts\app\showModal.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2" />
+    <Content Include="fonts\MaterialIcons-Regular.ttf" />
+    <Content Include="fonts\MaterialIcons-Regular.woff" />
+    <Content Include="fonts\MaterialIcons-Regular.woff2" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-1.12.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.12.4.js" />
@@ -370,6 +381,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Schedule\Index.cshtml" />
+    <Content Include="Views\Schedule\EditSchedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -398,6 +410,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711252021027_add nickname.resx">
       <DependentUpon>201711252021027_add nickname.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712052205593_add start date to schedule item model.resx">
+      <DependentUpon>201712052205593_add start date to schedule item model.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
