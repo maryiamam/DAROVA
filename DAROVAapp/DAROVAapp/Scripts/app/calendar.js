@@ -24,7 +24,7 @@
             startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
             endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 7);
             selectCurrentWeek();
-            showSchedule(startDate, endDate);
+            showWeek(startDate, endDate);
 
         },
         beforeShowDay: function (date) {
@@ -47,44 +47,71 @@
         }, 1);
     }
 
-    var showSchedule = function(start, end) {
+    var showDay = function (weekDay, weekSchedule) {
+        $(".schedule").html("");
+        let plansExist = false;
+        let week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        let day = $("<div/>", { class: "card"}).appendTo($(".schedule"));
+        $("<h4/>", { class: "center card-header" }).html(week[weekDay]).appendTo(day);
+        let tableDiv = $("<div/>", { class: "card-content" }).appendTo(day);
+        let table = $("<table/>", { class: "highlight" }).appendTo(tableDiv);
+        $("<thead/>").html("<tr><th>Time</th><th>Subject</th><th>Place</th><th>Professor</th><th>Type</th></tr>")
+            .appendTo(table);
+        let body = $("<tbody/>").appendTo(table);
+        for (let k = 0; k < weekSchedule.length; k++) {
+            if (weekDay + 1 === parseDate(weekSchedule[k].StartDate).getDay()) {
+                plansExist = true;
+                let tr = $("<tr/>").appendTo(body);
+                $("<td/>").html(toHumanTime(weekSchedule[k].StartTime) + "-" +
+                    toHumanTime(weekSchedule[k].FinishTime)).appendTo(tr);
+                $("<td/>").html(weekSchedule[k].SubjectName).appendTo(tr);
+                $("<td/>").html(weekSchedule[k].Place).appendTo(tr);
+                $("<td/>").html(weekSchedule[k].Professor).appendTo(tr);
+                $("<td/>").html(weekSchedule[k].Type).appendTo(tr);
+            }
+        }
+        if (!plansExist) {
+            tableDiv.html("<div class='card-content'>no plans for this day</div>");
+        }
+    }
+
+    var showWeek = function(start, end) {
         self.sd = start, self.ed = end;
-        $(".week").css("display", "block");
         let url = `/Schedule/GetWeek`;
         let getUrl = url + '?start=' + self.sd.toISOString() + '&end=' + self.ed.toISOString();
         $.get(getUrl, function(response) {
             let week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-            $(".week").html("").css("display", "block");
-            $(".chosen-day").css("display", "none");
+            $(".schedule").html("");
             for (let i = 0; i < 7; i++) {
                 let plansExist = false;
-                let div = $("<div/>", { class: "col-md-4"}).appendTo($(".week"));
+                let div = $("<div/>", { class: "col-md-4"}).appendTo($(".schedule"));
                 let day = $("<div/>", { class: "card " + week[i] }).appendTo(div);
-                $("<a/>", { class: "center card-header" }).html(week[i]).appendTo(day);
+                $("<h5/>", { class: "center card-header" }).html(week[i]).appendTo(day).click(function() {
+                    showDay(i, response);
+                });
                 if (response) {
-                    $("<div/>", { class: "card-content" }).html("<table><thead><tr><th>Time</th><th>" +
-                        "Subject</th><th>Place</th></tr></thead><tbody><tr class='subjects " + week[i] +
-                        "'></tr></tbody></table>").appendTo(day);
+                    $("<div/>", { class: "card-content " + week[i]}).html("<table class='highlight'><thead><tr><th>Time</th><th>Subject</th>" +
+                        "<th>Place</th></tr></thead><tbody class='subjects " + week[i] +
+                        "'></tbody></table>").appendTo(day);
                     for (let j = 0; j < response.length; j++) {
                         let startDate = parseDate(response[j].StartDate);
                         let dateDay = startDate.getDay();
-                        if (dateDay === i) {
+                        if (dateDay === i + 1) {
                             plansExist = true;
+                            let tr = $("<tr/>").appendTo($(".subjects." + week[i]));
                             $("<td/>").html(toHumanTime(response[j].StartTime) + "-<br/>" + toHumanTime(response[j].FinishTime))
-                                .appendTo($(".subjects." + week[i]));
+                                .appendTo(tr);
                             $("<td/>").html(response[j].SubjectName + "<br>(" + response[j].Type + ")")
-                                .appendTo($(".subjects." + week[i]));
-                            $("<td/>").html(response[j].Place).appendTo($(".subjects." + week[i]));
-                        } else {
-                            console.log("");
-                        }
+                                .appendTo(tr);
+                            $("<td/>").html(response[j].Place).appendTo(tr);
+                        } 
                     }
                     if (!plansExist) {
-                        $("<div/>", { class: "card-content" }).html("no plans").appendTo(day);
+                        $(".card-content." + week[i]).html("<div class='card-content'>no plans</div>");
                     }
                 }
                 else {
-                    $("<div/>", { class: "card-content" }).html("no plans").appendTo(day);
+                    $(".card-content." + week[i]).html("<div class='card-content'>no plans</div>");
                 }
             }
         }); 

@@ -82,7 +82,7 @@ namespace DAROVAapp.Controllers
         {
             var userId = User.Identity.GetUserId();
             ApplicationDbContext db = new ApplicationDbContext();
-            List<ScheduleItemModel> list = db.ScheduleItems.ToList();
+            List<ScheduleItemModel> list = db.ScheduleItems.OrderBy(d => d.StartTime).ToList();
             List<ScheduleItemModel> week = list.Where(t => !(DateTime.Compare(t.StartDate, end) > 0) &&
                 !(DateTime.Compare(t.StartDate.AddDays((t.Duration - 1) * 7), start) < 0) &&
                 t.UserId == userId).ToList();
